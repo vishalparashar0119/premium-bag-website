@@ -1,5 +1,6 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
+import connectDb from './database/dataBase.js';
 
 
 const app = express();
@@ -10,6 +11,9 @@ app.use(express.urlencoded({extended:true}));
 app.use( cookieParser());
 app.set('view engine' , 'ejs');
 app.use(express.static('public'));
+
+
+connectDb();
 
 app.get('/' , (req ,res)=>{
       res.send('server is running');
