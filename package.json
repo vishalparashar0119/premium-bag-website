@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "this is a premium bag website which work on ejs and express and mongodb",
   "main": "app.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node --watch app.js"
