@@ -1,13 +1,14 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import connectDb from './database/dataBase.js';
+import dotenv from 'dotenv';
 import ownersRouter from './routes/ownersRouter.js';
 import usersRouter from './routes/usersRouter.js';
-import productsRouter from './routes/productsRouter.js';    
+import productsRouter from './routes/productsRouter.js';   
 
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -16,6 +17,7 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
 
+dotenv.config();
 connectDb();
 
 app.use('/owners', ownersRouter);
