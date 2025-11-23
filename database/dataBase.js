@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
-const mongoUri = process.env.MONGODBURL | 'mongodb://localhost:27017/a-primium-bag-website';
+const mongoUri = process.env.MONGODBURL || 'mongodb://localhost:27017/a-primium-bag-website';
 
 const connectDb = async () => {
       try {
-            await mongoose.connect('mongodb://localhost:27017/a-primium-bag-website', {
+            await mongoose.connect(mongoUri, {
                   serverSelectionTimeoutMS: 5000
             })
             console.log('DataBase Connected Successfully');
