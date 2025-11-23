@@ -11,10 +11,6 @@
 
 import mongoose from 'mongoose';
 
-mongoose.connect(process.env.MONGODBURL, {
-      serverSelectionTimeoutMS: 5000
-})
-
 const userSchema = new mongoose.Schema({
       fullName: String,
       email: String,
