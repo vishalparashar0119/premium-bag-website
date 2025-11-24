@@ -6,7 +6,9 @@ import cookieParser from 'cookie-parser';
 import connectDb from './database/dataBase.js';
 import ownersRouter from './routes/ownersRouter.js';
 import usersRouter from './routes/usersRouter.js';
-import productsRouter from './routes/productsRouter.js';   
+import productsRouter from './routes/productsRouter.js';
+import expressSession from 'express-session';
+import flash from 'connect-flash';
 
 
 const app = express();
@@ -16,6 +18,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
+app.use(expressSession({
+      resave: false,
+      saveUninitialized: false,
+      secret: process.env.EXPRESS_SESSION_SECRET
+}));
+app.use(flash());
 
 
 const port = process.env.PORT || 3000;
