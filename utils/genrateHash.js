@@ -1,16 +1,15 @@
 import bcrypt from 'bcrypt';
 
-const genrateHash = (password) => {
-   return new Promise ((resolve , reject)=>{
-      bcrypt.genSalt(11 , (err , salt)=>{
-            if(err) return reject (err);
 
-            bcrypt.hash(password , salt , (err , hash)=>{
-                  if(err) return reject(err);
-                  resolve (hash);
-            })
-      })
-   })
+const genrateHash = async (password) => {
+      try {
+            const salt = await bcrypt.genSalt(11);
+            const hash = await bcrypt.hash(password, salt);
+            return hash;
+      } catch (error) {
+            throw error;
+      }
+
 }
 
 export default genrateHash;
