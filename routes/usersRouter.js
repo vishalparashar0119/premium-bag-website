@@ -1,7 +1,7 @@
 import express from 'express';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import genrateJwtToken from '../utils/genrateJwtToken.js';
 import UserModel from '../models/UserModel.js';
+import genrateHash from '../utils/genrateHash.js';
 
 const router = express.Router();
 
@@ -19,19 +19,15 @@ router.post('/register', async (req, res) => {
                   return res.status(400).send({ message: 'user already exists' });
             }
 
+            const hashPassword = await genrateHash(password);
+            const newUser = await UserModel.create({
+                  fullName, email, password: hashPassword
+            });
 
-            bcrypt.genSalt(11, (err, salt) => {
+            const token = genrateJwtToken(newUser);
+            res.cookie('token', token);
 
-                  if (err) return res.send(err.message);
-
-                  bcrypt.hash(password, salt, async (err, hash) => {
-                        if (err) return res.send(err.message);
-                        const newUser = await UserModel.create({
-                              fullName, email, password: hash
-                        })
-                        res.send(newUser);
-                  })
-            })
+            res.send(newUser);
 
       } catch (error) {
             console.log(error.message);
