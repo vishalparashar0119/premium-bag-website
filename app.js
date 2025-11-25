@@ -9,6 +9,7 @@ import usersRouter from './routes/usersRouter.js';
 import productsRouter from './routes/productsRouter.js';
 import expressSession from 'express-session';
 import flash from 'connect-flash';
+import cors from 'cors';
 
 
 const app = express();
@@ -24,6 +25,9 @@ app.use(expressSession({
       secret: process.env.EXPRESS_SESSION_SECRET
 }));
 app.use(flash());
+app.use(cors({
+      origin: 'http://localhost:5173'
+}));
 
 
 const port = process.env.PORT || 3000;
@@ -34,7 +38,8 @@ app.use('/users', usersRouter);
 app.use('/products', productsRouter);
 
 app.get('/', (req, res) => {
-      res.send('server is running');
+      const error = req.flash('error')
+      res.json({ message: 'server is running', error });
 });
 
 app.listen(port, () => {

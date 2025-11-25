@@ -10,7 +10,7 @@ export const registerUser = async (req, res) => {
             const { fullName, email, password } = req.body;
 
             const user = await UserModel.findOne({ email: email });
-            if (user) return res.status(400).send({ message: 'user already exists' });
+            if (user) return res.status(400).json({ success : false , message : 'user already exist'});
 
 
             const hashPassword = await genrateHash(password);
@@ -21,7 +21,11 @@ export const registerUser = async (req, res) => {
             const token = genrateJwtToken(newUser);
             res.cookie('token', token);
 
-            res.send(newUser);
+            res.status(200).json({
+                  success : true ,
+                  user : newUser , 
+                  token : token
+            });
 
       } catch (error) {
             console.log(error.message);
