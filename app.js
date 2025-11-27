@@ -7,6 +7,7 @@ import connectDb from './database/dataBase.js';
 import ownersRouter from './routes/ownersRouter.js';
 import usersRouter from './routes/usersRouter.js';
 import productsRouter from './routes/productsRouter.js';
+import index from './routes/index.js';
 import expressSession from 'express-session';
 import flash from 'connect-flash';
 import cors from 'cors';
@@ -26,7 +27,8 @@ app.use(expressSession({
 }));
 app.use(flash());
 app.use(cors({
-      origin: 'http://localhost:5173'
+      origin: 'http://localhost:5173',
+      credentials : true
 }));
 
 
@@ -34,6 +36,7 @@ const port = process.env.PORT || 3000;
 connectDb();
 
 app.use('/owners', ownersRouter);
+app.use('/shop', index);
 app.use('/users', usersRouter);
 app.use('/products', productsRouter);
 

@@ -19,12 +19,16 @@ export const registerUser = async (req, res) => {
             });
 
             const token = genrateJwtToken(newUser);
-            res.cookie('token', token);
+
+            res.cookie('token', token , {
+                  httpOnly : true,
+                  secure : false , 
+                  sameSite : 'lax'
+            });
 
             res.status(200).json({
                   success : true ,
-                  user : newUser , 
-                  token : token
+                  user : newUser ,
             });
 
       } catch (error) {
