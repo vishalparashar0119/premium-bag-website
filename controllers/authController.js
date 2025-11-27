@@ -10,7 +10,7 @@ export const registerUser = async (req, res) => {
             const { fullName, email, password } = req.body;
 
             const user = await UserModel.findOne({ email: email });
-            if (user) return res.status(400).json({ success : false , message : 'user already exist'});
+            if (user) return res.status(400).json({ success: false, message: 'user already exist' });
 
 
             const hashPassword = await genrateHash(password);
@@ -20,15 +20,16 @@ export const registerUser = async (req, res) => {
 
             const token = genrateJwtToken(newUser);
 
-            res.cookie('token', token , {
-                  httpOnly : true,
-                  secure : false , 
-                  sameSite : 'lax'
+            res.cookie('token', token, {
+                  httpOnly: true,
+                  secure: false,
+                  sameSite: 'lax',
+                  path: '/'
             });
 
             res.status(200).json({
-                  success : true ,
-                  user : newUser ,
+                  success: true,
+                  user: newUser,
             });
 
       } catch (error) {
@@ -43,17 +44,38 @@ export const loginUser = async (req, res) => {
             const { email, password } = req.body;
 
             const user = await UserModel.findOne({ email: email });
-            if (!user) return res.status(404).send({ message: 'email or password is incorrect' });
+            if (!user) return res.status(404).send({ success : false , message: 'email or password is incorrect' });
 
             const isMatch = await comparePassword(password, user.password);
-            if (!isMatch) return res.status(401).send({ message: 'email or password is incorrect' })
+            if (!isMatch) return res.status(401).json({success : false , message : 'email or password is incorrect'})
 
             const token = genrateJwtToken(user);
-            res.cookie('token', token);
+            res.cookie('token', token ,{
+                  httpOnly: true,
+                  secure: false,
+                  sameSite: 'lax',
+                  path: '/'
+            });
 
-            return res.send({ message: "user login successfully" });
+            return res.status(200).json({success : true , message : 'login success fully'});
 
       } catch (error) {
             console.log(error.message);
+      }
+}
+
+export const logoutUser = async (req, res) => {
+      try {
+
+            res.clearCookie('token', {
+                  httpOnly: true,
+                  secure: false,
+                  sameSite: 'lax',
+                  path: '/'
+            })
+
+            res.status(200).json({ success: true, message: 'logout successfully' })
+      } catch (error) {
+            res.status(500).json({ success: false, message: 'something went wrong' });
       }
 }
