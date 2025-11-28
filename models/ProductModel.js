@@ -13,7 +13,7 @@ import mongoose from "mongoose";
 const productSchema = new mongoose.Schema({
       productName: String,
       price: Number,
-      image: String,
+      image: Buffer,
       discount: {
             type: Number,
             default: 0
