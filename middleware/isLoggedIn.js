@@ -10,9 +10,9 @@ const isLoggendIn = async (req, res, next) => {
             const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
             const user = await UserModel.findOne({ email: decoded.email }).select('-password');
 
-            if(!user) return res.status(404).json({success : false , message : 'user not found'})
+            if(!user) return res.status(404).json({success : false , message : 'user not found'});
 
-            req.user = user;
+            req.user = {email : user.email , id : user._id};
             next();
       } catch (error) {
             return res.status(404).json({ status: false, message: ' unautherise access' })
