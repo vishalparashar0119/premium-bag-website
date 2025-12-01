@@ -8,8 +8,6 @@ import ownersRouter from './routes/ownersRouter.js';
 import usersRouter from './routes/usersRouter.js';
 import productsRouter from './routes/productsRouter.js';
 import index from './routes/index.js';
-import expressSession from 'express-session';
-import flash from 'connect-flash';
 import cors from 'cors';
 
 
@@ -20,12 +18,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
-app.use(expressSession({
-      resave: false,
-      saveUninitialized: false,
-      secret: process.env.EXPRESS_SESSION_SECRET
-}));
-app.use(flash());
 app.use(cors({
       origin: 'http://localhost:5173',
       credentials : true
