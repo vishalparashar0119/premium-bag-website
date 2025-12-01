@@ -15,20 +15,22 @@ const userSchema = new mongoose.Schema({
       fullName: String,
       email: String,
       password: String,
-      cart: {
-            type: Array,
-            default: []
-      },
+      cart: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Product'
+      }],
       isAdmin: {
             type: Boolean,
             default: false
       },
       phoneNo: Number,
       address: String,
-      orderHistory: {
-            type: Array,
-            default: []
-      }
+      orderHistory: [
+            {
+                  type : mongoose.Schema.Types.ObjectId,
+                  ref : 'Product'
+            }
+      ]
 });
 
 const UserModel = mongoose.model('User', userSchema);
