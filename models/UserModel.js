@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
       password: String,
       cart: [{
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Product'
+            ref: 'Product',
       }],
       isAdmin: {
             type: Boolean,
