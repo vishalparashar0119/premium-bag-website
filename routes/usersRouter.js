@@ -1,7 +1,7 @@
 import express from 'express';
 import { registerUser, loginUser, logoutUser } from '../controllers/authController.js';
 import isLoggendIn from '../middleware/isLoggedIn.js';
-import { addToCart, myAccount } from '../controllers/userController.js';
+import { addToCart, fetchDataFromCart, myAccount } from '../controllers/userController.js';
 
 const router = express.Router();
 
@@ -17,6 +17,8 @@ router.post('/login', loginUser);
 router.post('/logout', logoutUser);
 
 router.get('/myAccount', isLoggendIn , myAccount );
+
+router.get('/cart' , isLoggendIn ,  fetchDataFromCart)
 
 router.post('/addToCart/:id' , isLoggendIn ,  addToCart)
 
