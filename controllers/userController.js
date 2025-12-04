@@ -10,3 +10,17 @@ export const myAccount = async (req, res) => {
       }
 
 }
+
+
+export const addToCart = async (req, res) => {
+      try {
+            const user = await UserModel.findOne({ email: req.user.email });
+            user.cart.push(req.params.id)
+            await user.save()
+
+            return res.status(200).json({success : true , message : 'product created successfully'})
+      } catch (error) {
+            console.log(error.message);
+            return res.status(400).json({ success : false , message : ' somting went wrong'})
+      }
+}
