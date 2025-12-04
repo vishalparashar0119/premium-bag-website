@@ -24,3 +24,14 @@ export const addToCart = async (req, res) => {
             return res.status(400).json({ success : false , message : ' somting went wrong'})
       }
 }
+
+export const fetchDataFromCart = async (req ,res) => {
+      try {
+            const { email }  = req.user;
+            const cartData = await UserModel.findOne({email}).select('cart').populate('cart');
+
+            return res.status(200).json({success : true , cartData : cartData})
+      } catch (error) {
+            return res.status(500).json ( { success : false , message : 'internal server error'});
+      }
+}
