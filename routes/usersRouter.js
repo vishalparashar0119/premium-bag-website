@@ -1,7 +1,7 @@
 import express from 'express';
 import { registerUser, loginUser, logoutUser } from '../controllers/authController.js';
 import isLoggendIn from '../middleware/isLoggedIn.js';
-import { addToCart, fetchDataFromCart, myAccount } from '../controllers/userController.js';
+import { addToCart, fetchDataFromCart, myAccount, removeToCart } from '../controllers/userController.js';
 
 const router = express.Router();
 
@@ -18,8 +18,11 @@ router.post('/logout', logoutUser);
 
 router.get('/myAccount', isLoggendIn , myAccount );
 
-router.get('/cart' , isLoggendIn ,  fetchDataFromCart)
+router.get('/cart' , isLoggendIn ,  fetchDataFromCart);
 
-router.post('/addToCart/:id' , isLoggendIn ,  addToCart)
+router.post('/addToCart/:id' , isLoggendIn ,  addToCart);
+
+router.post('/removeToCart/:id' , isLoggendIn ,  removeToCart);
+
 
 export default router;
