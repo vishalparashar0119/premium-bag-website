@@ -16,8 +16,15 @@ const userSchema = new mongoose.Schema({
       email: String,
       password: String,
       cart: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Product',
+            products: {
+                  type: mongoose.Schema.Types.ObjectId,
+                  ref: 'Product'
+            },
+            quantity: {
+                  type: Number,
+                  default: 1
+            }
+
       }],
       isAdmin: {
             type: Boolean,
@@ -27,8 +34,8 @@ const userSchema = new mongoose.Schema({
       address: String,
       orderHistory: [
             {
-                  type : mongoose.Schema.Types.ObjectId,
-                  ref : 'Product'
+                  type: mongoose.Schema.Types.ObjectId,
+                  ref: 'Product'
             }
       ]
 });
