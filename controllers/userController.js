@@ -52,9 +52,10 @@ export const removeToCart = async (req, res) => {
 
             if (user.cart.includes(id)) {
                   user.cart = user.cart.filter((items) => { return items.toString() !== id });
-                  await user.save()
-
-                  return res.status(200).json({ success: true, message: 'Remove from cart successfully' })
+                  await user.save();
+                  
+                  const updatedCart = await user.populate('cart');
+                  return res.status(200).json({ success: true, message: 'Remove from cart successfully',cartData : updatedCart.cart });
             }
 
 
