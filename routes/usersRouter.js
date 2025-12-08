@@ -1,7 +1,8 @@
 import express from 'express';
-import { registerUser, loginUser, logoutUser } from '../controllers/authController.js';
+import { registerUser, loginUser, logoutUser , verifyEmail } from '../controllers/authController.js';
 import isLoggendIn from '../middleware/isLoggedIn.js';
 import { addToCart, fetchDataFromCart, myAccount, removeToCart, updateQuantity } from '../controllers/userController.js';
+import isVerificationPending from '../middleware/isVerificationPending.js';
 
 const router = express.Router();
 
@@ -10,7 +11,9 @@ router.get('/', (req, res) => {
       res.send('Users Home Page');
 });
 
-router.post('/register', registerUser);
+router.post('/verify', verifyEmail);
+
+router.post('/register',isVerificationPending, registerUser);
 
 router.post('/login', loginUser);
 
