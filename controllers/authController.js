@@ -59,7 +59,7 @@ export const registerUser = async (req, res) => {
 
             console.log(verified);
 
-            if(!verified) return res.status(401).json({success : false , message : 'You are not autherised'})
+            if(!verified) return res.status(401).json({success : false , message : 'Please enter a correct OTP'})
 
             const newUser = await UserModel.create({
                   fullName : pendingUser.fullName, email : pendingUser.email, password: pendingUser.password
