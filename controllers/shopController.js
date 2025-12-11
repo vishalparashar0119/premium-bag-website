@@ -1,4 +1,5 @@
-import ProductModel from "../models/ProductModel.js"
+import ProductModel from "../models/ProductModel.js";
+import UserModel from '../models/UserModel.js';
 
 
 export const fetchAllProducts = async (req, res) => {
@@ -49,5 +50,22 @@ export const fetchSingleProduct = async (req, res) => {
             })
       } catch (error) {
             console.log(error.message)
+      }
+}
+
+export const getProductToOrder = async ( req , res) =>{
+      try {
+            const {email} = req.user;
+            const {id} = req.params; 
+
+            const user = await UserModel.findOne({email}).populate('cart.products');
+            const product = await ProductModel.findById(id);
+
+            return res.status(200).json({success : true , message:"data found" , product , user});
+
+
+      } catch (error) {
+       console.log('Shop controller : order Product ::',error.message);
+       return res.status(500).json({success : false , message : 'Somthing went worng'});     
       }
 }
