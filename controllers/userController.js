@@ -4,9 +4,16 @@ import UserModel from "../models/UserModel.js";
 export const myAccount = async (req, res) => {
 
       try {
-            const user = await UserModel.findOne({ email: req.user.email }).populate('orderHistory').select('-password')
+            const user = await UserModel.findOne({ email: req.user.email }).populate({
+                  path:'orderHistory' , 
+                  populate : {
+                        path : 'productId',
+                        model :'Product'
+                  }
+            }).select('-password')
             return res.status(200).json({ success: true, user: user });
       } catch (error) {
+            console.log('User controller : myAccount ::',error.message);
             return res.status(500).json({ success: false, message: 'internal server error' })
       }
 

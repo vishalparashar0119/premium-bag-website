@@ -23,7 +23,7 @@ export const verifyRazorpayPayment = async (req, res) => {
 
       try {
             if (confirmSignature(razorpay_order_id, razorpay_payment_id, razorpay_signature)) {
-                  return res.status(200).json({ success: true, message: 'Payment verified! ' });
+                  return res.status(200).json({ success: true, message: 'Payment verified! ' , razorpay_payment_id});
             } else {
                   return res.status(400).json({ success: false, message: 'Payment varification failed!' });
             }
