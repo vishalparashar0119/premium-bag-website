@@ -16,7 +16,7 @@ export const fetchAllProducts = async (req, res) => {
 export const createProduct = async (req, res) => {
 
       try {
-            const { productName, price, discount, backgroundColor, pannelColor, textColor } = req.body;
+            const { productName, price, discount, backgroundColor, pannelColor, textColor, description, quantity, status } = req.body;
 
             const imageUrl = req.file.path;
             const publicId = req.file.filename;
@@ -24,7 +24,7 @@ export const createProduct = async (req, res) => {
             const newProduct = await ProductModel.create({
                   productName, price, image: {
                         imageUrl: imageUrl, publicId: publicId
-                  }, discount, backgroundColor, pannelColor, textColor
+                  }, discount, backgroundColor, pannelColor, textColor, description, quantity, status
             })
 
             return res.status(200).json({
@@ -53,19 +53,19 @@ export const fetchSingleProduct = async (req, res) => {
       }
 }
 
-export const getProductToOrder = async ( req , res) =>{
+export const getProductToOrder = async (req, res) => {
       try {
-            const {email} = req.user;
-            const {id} = req.params; 
+            const { email } = req.user;
+            const { id } = req.params;
 
-            const user = await UserModel.findOne({email}).populate('cart.products');
+            const user = await UserModel.findOne({ email }).populate('cart.products');
             const product = await ProductModel.findById(id);
 
-            return res.status(200).json({success : true , message:"data found" , product , user});
+            return res.status(200).json({ success: true, message: "data found", product, user });
 
 
       } catch (error) {
-       console.log('Shop controller : order Product ::',error.message);
-       return res.status(500).json({success : false , message : 'Somthing went worng'});     
+            console.log('Shop controller : order Product ::', error.message);
+            return res.status(500).json({ success: false, message: 'Somthing went worng' });
       }
 }
