@@ -7,6 +7,12 @@
 // panel color 
 // text color 
 
+// updated fields 
+// quantity - number to ensue product is in stock or out stock
+//description 
+// status - string - enum : ["in stock" , 'out of stock '];
+//
+
 
 import mongoose from "mongoose";
 
@@ -21,6 +27,8 @@ const productSchema = new mongoose.Schema({
             type: Number,
             default: 0
       },
+      description : String ,
+      quantity : Number,
       backgroundColor: String,
       pannelColor: String,
       textColor: String
