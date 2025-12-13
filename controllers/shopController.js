@@ -9,13 +9,14 @@ export const fetchAllProducts = async (req, res) => {
             const products = await ProductModel.find();
             return res.status(200).json({ success: true, products });
       } catch (error) {
+
+            console.log('Shop controller : Fetch All Product ::', error.message);
             return res.status(500).json({ success: false, message: "internal server error" })
       }
 
 }
 
 export const createProduct = async (req, res) => {
-
       try {
             const { productName, price, discount, backgroundColor, pannelColor, textColor, description, quantity, status } = req.body;
 
@@ -33,6 +34,8 @@ export const createProduct = async (req, res) => {
                   message: 'Product created successfully'
             })
       } catch (error) {
+
+            console.log('Shop controller : Create Product ::', error.message);
             return res.status(500).json({ success: false, message: error.message })
       }
 }
@@ -50,6 +53,8 @@ export const fetchSingleProduct = async (req, res) => {
                   product
             })
       } catch (error) {
+
+            console.log('Shop controller : Fetch Single Product ::', error.message);
             console.log(error.message)
       }
 }
@@ -66,7 +71,7 @@ export const getProductToOrder = async (req, res) => {
 
 
       } catch (error) {
-            console.log('Shop controller : order Product ::', error.message);
+            console.log('Shop controller : Get Product To Order ::', error.message);
             return res.status(500).json({ success: false, message: 'Somthing went worng' });
       }
 }
@@ -91,7 +96,48 @@ export const orderProduct = async (req, res) => {
 
             return res.status(200).json({ success: true, message: 'Order successfull' })
       } catch (error) {
-            console.log('Shop controller : orderProduct ::', error.message);
+            console.log('Shop controller : OrderProduct ::', error.message);
             return res.status(500).json({ success: false, message: 'Somthing went worng?' })
+      }
+}
+
+export const newestProducts = async (req, res) => {
+      try {
+            const products = await ProductModel.find().sort({ createdAt: -1 });
+            return res.status(200).json({ success: true, message: "newest product", products });
+      } catch (error) {
+            console.log('Shop Controller : Newest Product ::', error.message);
+            return res.status(500).json({ success: false, message: 'somthing went wrong' });
+      }
+}
+
+export const popularProducs = async (req, res) => {
+      try {
+            const products = await ProductModel.find().sort({ totalSell: -1 });
+            return res.status(200).json({ success: true, message: 'popular products', products });
+      } catch (error) {
+            console.log('Shop Controller : Popular Product ::', error.message);
+            return res.status(500).json({ success: false, message: 'somthing went wrong' });
+      }
+}
+
+export const discountProducts = async (req, res) => {
+      try {
+            const products = await ProductModel.find({ discount: { $gt: 0 } }).sort({ discount: -1, createdAt: -1 });
+            if (products.length == 0) return res.status(200).json({ success: true, message: 'NO product yet' });
+            return res.status(200).json({ success: true, message: 'popular products', products });
+      } catch (error) {
+            console.log('Shop Controller : Discount Product ::', error.message);
+            return res.status(500).json({ success: false, message: 'somthing went wrong' });
+      }
+}
+
+export const availableProducts = async (req, res) => {
+      try {
+            const products = await ProductModel.find({ quantity: { $gt: 0 } });
+            return res.status(200).json({ success: true, message: 'popular products', products });
+      } catch (error) {
+            console.log('Shop Controller : Newest Product ::', error.message);
+            return res.status(500).json({ success: false, message: 'somthing went wrong' });
       }
 }

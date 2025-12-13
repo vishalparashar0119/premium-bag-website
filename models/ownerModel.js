@@ -22,6 +22,8 @@ const ownerSchema = new mongoose.Schema({
             default: []
       },
       gstNumber : String
+}, {
+      timestamps: true
 });
 
 const OwnerModel = mongoose.model('Owner', ownerSchema);
