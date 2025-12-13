@@ -38,6 +38,8 @@ const userSchema = new mongoose.Schema({
                   ref: 'order'
             }
       ]
+}, {
+      timestamps: true
 });
 
 const UserModel = mongoose.model('User', userSchema);

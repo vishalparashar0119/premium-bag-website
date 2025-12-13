@@ -31,7 +31,13 @@ const productSchema = new mongoose.Schema({
       quantity : Number,
       backgroundColor: String,
       pannelColor: String,
-      textColor: String
+      textColor: String,
+      totalSell : {
+       type : Number,
+       default : 0         
+      }
+},{
+      timestamps:true
 });
 
 const ProductModel = mongoose.model('Product', productSchema);
