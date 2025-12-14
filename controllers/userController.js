@@ -5,15 +5,15 @@ export const myAccount = async (req, res) => {
 
       try {
             const user = await UserModel.findOne({ email: req.user.email }).populate({
-                  path:'orderHistory' , 
-                  populate : {
-                        path : 'productId',
-                        model :'Product'
+                  path: 'orderHistory',
+                  populate: {
+                        path: 'productId',
+                        model: 'Product'
                   }
             }).select('-password')
             return res.status(200).json({ success: true, user: user });
       } catch (error) {
-            console.log('User controller : myAccount ::',error.message);
+            console.log('User controller : myAccount ::', error.message);
             return res.status(500).json({ success: false, message: 'internal server error' })
       }
 
@@ -96,5 +96,31 @@ export const updateQuantity = async (req, res) => {
             return res.status(200).json({ success: true, message: 'updated quantity', updatedCart })
       } catch (error) {
             console.log(error.message)
+      }
+}
+
+export const updateUser = async (req, res) => {
+      try {
+            const { email, fullName, phoneNo, address } = req.body;
+            const user = await UserModel.findOneAndUpdate({ email }, {
+                  $set: { fullName, phoneNo, address }
+            }, {
+                  new: true
+            }).populate({
+                  path: 'orderHistory',
+                  populate: {
+                        path: 'productId',
+                        model: 'Product'
+                  }
+            }).select('-password');
+
+            return res.status(200).json({
+                  success: true, message: 'Updated user successfully'
+                  , user
+            });
+
+      } catch (error) {
+            console.log('User Controller : Update User', error.message);
+            return res.status(500).json({ success: false, message: 'Somthing went worng' });
       }
 }
