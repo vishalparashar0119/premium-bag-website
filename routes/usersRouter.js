@@ -1,7 +1,7 @@
 import express from 'express';
 import { registerUser, loginUser, logoutUser, verifyEmail } from '../controllers/authController.js';
 import isLoggendIn from '../middleware/isLoggedIn.js';
-import { addToCart, fetchDataFromCart, myAccount, removeToCart, updateQuantity } from '../controllers/userController.js';
+import { addToCart, fetchDataFromCart, myAccount, removeToCart, updateQuantity, updateUser } from '../controllers/userController.js';
 import isVerificationPending from '../middleware/isVerificationPending.js';
 import { createOrderRazorPay, verifyRazorpayPayment } from '../controllers/paymentController.js';
 import { getProductToOrder } from '../controllers/shopController.js';
@@ -36,5 +36,7 @@ router.post('/razorPay/createOrder', createOrderRazorPay);
 router.post('/razorPay/verifyPayment', verifyRazorpayPayment);
 
 router.get('/order/:id',isLoggendIn , getProductToOrder);
+
+router.put('/update' , updateUser);
 
 export default router;

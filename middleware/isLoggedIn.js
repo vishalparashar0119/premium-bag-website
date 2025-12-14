@@ -15,6 +15,7 @@ const isLoggendIn = async (req, res, next) => {
             req.user = {email : user.email , id : user._id};
             next();
       } catch (error) {
+            console.log('Middleware : Is Loggend In ::',error.message)
             return res.status(404).json({ status: false, message: ' unautherise access' })
       }
 }
