@@ -12,8 +12,8 @@ export const createOrderRazorPay = async (req, res) => {
 
             return res.status(200).json({ success: true, message: 'Order  created successfully ', order });
       } catch (error) {
-            console.log(error.message);
-            return res.status(500).json({ success: false, message: 'Somthing went wrong' })
+            console.log('Paymetn controller : Create Order Razorpay::',error.message);
+            return res.status(500).json({success : false , message : 'Somthing went wrong!'});
       }
 }
 
@@ -28,7 +28,7 @@ export const verifyRazorpayPayment = async (req, res) => {
                   return res.status(400).json({ success: false, message: 'Payment varification failed!' });
             }
       } catch (error) {
-            console.log(error.message);
-            return res.status(500).json({ success: false, message: 'Somthing went wrong' })
+            console.log('Payment controller : Verify Payment::',error.message);
+            return res.status(500).json({success : false , message : 'Somthing went wrong!'});
       }
 }

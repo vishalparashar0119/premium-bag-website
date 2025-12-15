@@ -14,7 +14,7 @@ export const myAccount = async (req, res) => {
             return res.status(200).json({ success: true, user: user });
       } catch (error) {
             console.log('User controller : myAccount ::', error.message);
-            return res.status(500).json({ success: false, message: 'internal server error' })
+            return res.status(500).json({ success: false, message: 'Somthing went wrong!' })
       }
 
 }
@@ -39,8 +39,8 @@ export const addToCart = async (req, res) => {
             return res.status(200).json({ success: true, message: 'Add to cart successfully' });
 
       } catch (error) {
-            console.log('add to cart api::', error.message);
-            return res.status(400).json({ success: false, message: ' somting went wrong' })
+            console.log('User controller : Add To Cart::', error.message);
+            return res.status(500).json({ success: false, message: 'Somthing went wrong!' })
       }
 }
 
@@ -51,8 +51,8 @@ export const fetchDataFromCart = async (req, res) => {
 
             return res.status(200).json({ success: true, cartData })
       } catch (error) {
-            console.log('fetch data from cart api ::', error.message);
-            return res.status(500).json({ success: false, message: 'somthing went wrong please try again' });
+            console.log('User controller : Fetch Data From Cart ::', error.message);
+            return res.status(500).json({ success: false, message: 'Somthing went wrong!' })
       }
 }
 
@@ -78,7 +78,8 @@ export const removeToCart = async (req, res) => {
 
 
       } catch (error) {
-            console.log(error.message)
+            console.log('User controller : Remove To Cart ::', error.message);
+            return res.status(500).json({ success: false, message: 'Somthing went wrong!' })
       }
 }
 
@@ -95,7 +96,8 @@ export const updateQuantity = async (req, res) => {
             const updatedCart = await user.populate('cart.products');
             return res.status(200).json({ success: true, message: 'updated quantity', updatedCart })
       } catch (error) {
-            console.log(error.message)
+            console.log('User controller : Update Quantity ::', error.message);
+            return res.status(500).json({ success: false, message: 'Somthing went wrong!' })
       }
 }
 
@@ -120,7 +122,7 @@ export const updateUser = async (req, res) => {
             });
 
       } catch (error) {
-            console.log('User Controller : Update User', error.message);
-            return res.status(500).json({ success: false, message: 'Somthing went worng' });
+            console.log('User Controller : Update User ::', error.message);
+            return res.status(500).json({ success: false, message: 'Somthing went worng!' });
       }
 }

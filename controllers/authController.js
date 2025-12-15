@@ -41,7 +41,8 @@ export const verifyEmail = async (req, res) => {
 
             return res.status(200).json({ success: true, message: 'user verification created successfully', verifyUser });
       } catch (error) {
-            console.log(error.message);
+            console.log('Auth controller : Verify Email::',error.message);
+            return res.status(500).json({success : false , message : 'Somthing went wrong!'});
       }
 }
 
@@ -80,7 +81,8 @@ export const registerUser = async (req, res) => {
             });
 
       } catch (error) {
-            console.log(error.message);
+            console.log('Auth controller : Rejister Email::',error.message);
+            return res.status(500).json({success : false , message : 'Somthing went wrong!'});
       }
 
 }
@@ -107,7 +109,8 @@ export const loginUser = async (req, res) => {
             return res.status(200).json({ success: true, message: 'login success fully' });
 
       } catch (error) {
-            console.log(error.message);
+            console.log('Auth controller : Login User::',error.message);
+            return res.status(500).json({success : false , message : 'Somthing went wrong!'});
       }
 }
 
@@ -123,6 +126,7 @@ export const logoutUser = async (req, res) => {
 
             res.status(200).json({ success: true, message: 'logout successfully' })
       } catch (error) {
-            res.status(500).json({ success: false, message: 'something went wrong' });
+            console.log('Auth controller : Logout User::',error.message);
+            return res.status(500).json({success : false , message : 'Somthing went wrong!'});
       }
 }
