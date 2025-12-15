@@ -78,21 +78,16 @@ export const getProductToOrder = async (req, res) => {
 
 export const orderProduct = async (req, res) => {
       try {
-            const { amount, userId, paymentId, productId, shippingAddress, quantity, modeOfPayment } = req.body;
-            const { email } = req.user;
+            const { amount, paymentId, productId, shippingAddress, quantity, modeOfPayment } = req.body;
+            const { email , id } = req.user;
 
-            const product = await ProductModel.findById(productId);
+            const product = await ProductModel.findOneAndUpdate({ _id: productId, quantity: { $gte: 1 } },{$inc : {quantity : -1 , totalSell :+1}}, {new : true});
 
-            if (product.quantity == 0) return res.status(409).json({ success: false, message: "Out of stock better luck next time" });
+            if (!product) return res.status(409).json({ success: false, message: "Out of stock better luck next time"});
 
-            const user = await UserModel.findOne({ email });
-            const newOrder = await OrderModel.create({ amount, userId, paymentId, productId, shippingAddress, quantity, modeOfPayment });
+            const newOrder = await OrderModel.create({ amount, userId: id, paymentId, productId, shippingAddress, quantity, modeOfPayment });
+            const user = await UserModel.findOneAndUpdate({ _id: id }, { $push: { orderHistory: newOrder._id } });
 
-            product.quantity -= 1;
-            await product.save();
-
-            user.orderHistory.push(newOrder._id);
-            await user.save();
 
             return res.status(200).json({ success: true, message: 'Order successfull' })
       } catch (error) {
