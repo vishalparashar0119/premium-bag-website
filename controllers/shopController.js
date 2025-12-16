@@ -1,6 +1,7 @@
 import OrderModel from "../models/orderModel.js";
 import ProductModel from "../models/ProductModel.js";
 import UserModel from '../models/UserModel.js';
+import deleteImageById from "../utils/deleteImage.js";
 
 
 export const fetchAllProducts = async (req, res) => {
@@ -79,11 +80,11 @@ export const getProductToOrder = async (req, res) => {
 export const orderProduct = async (req, res) => {
       try {
             const { amount, paymentId, productId, shippingAddress, quantity, modeOfPayment } = req.body;
-            const { email , id } = req.user;
+            const { email, id } = req.user;
 
-            const product = await ProductModel.findOneAndUpdate({ _id: productId, quantity: { $gte: 1 } },{$inc : {quantity : -1 , totalSell :+1}}, {new : true});
+            const product = await ProductModel.findOneAndUpdate({ _id: productId, quantity: { $gte: 1 } }, { $inc: { quantity: -1, totalSell: +1 } }, { new: true });
 
-            if (!product) return res.status(409).json({ success: false, message: "Out of stock better luck next time"});
+            if (!product) return res.status(409).json({ success: false, message: "Out of stock better luck next time" });
 
             const newOrder = await OrderModel.create({ amount, userId: id, paymentId, productId, shippingAddress, quantity, modeOfPayment });
             const user = await UserModel.findOneAndUpdate({ _id: id }, { $push: { orderHistory: newOrder._id } });
@@ -136,3 +137,41 @@ export const availableProducts = async (req, res) => {
             return res.status(500).json({ success: false, message: 'somthing went wrong' });
       }
 }
+
+export const updateProduct = async (req, res) => {
+      try {
+            const { productName, price, discount, backgroundColor, pannelColor, textColor, description, quantity, status } = req.body;
+
+            const imageUrl = req.file.path;
+            const publicId = req.file.filename;
+
+            const updatedProduct = ProductModel.findOneAndUpdate()
+
+            return res.status(200).json({
+                  success: true,
+                  message: 'Product created successfully'
+            })
+      } catch (error) {
+            console.log('Shop Controller : Update Product ::', error.message);
+            return res.status(500).json({ success: false, message: 'Somthing went wrong!' })
+      }
+}
+
+export const deleteProduct = async (req, res) => {
+      try {
+            const { id } = req.params;
+            const deletedProduct = await ProductModel.findByIdAndDelete(id);
+
+            if(!deletedProduct) return res.status(400).json({success: false , message : 'Product not found'});
+
+            await deleteImageById(deletedProduct.image.publicId);
+
+            const products = await  ProductModel.find();
+
+            return res.status(200).json({success : true , message: " product deleted successfully!" , products})
+
+      } catch (error) {
+            console.log('Shop Controller : Update Product ::', error.message);
+            return res.status(500).json({ success: false, message: 'Somthing went wrong!' })
+      }
+} 
