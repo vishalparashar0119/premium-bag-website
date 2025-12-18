@@ -1,7 +1,9 @@
+import mongoose from "mongoose";
 import OrderModel from "../models/orderModel.js";
 import ProductModel from "../models/ProductModel.js";
 import UserModel from '../models/UserModel.js';
 import deleteImageById from "../utils/deleteImage.js";
+import moveImage from "../utils/moveImageCloudnary.js";
 
 
 export const fetchAllProducts = async (req, res) => {
@@ -56,7 +58,7 @@ export const fetchSingleProduct = async (req, res) => {
       } catch (error) {
 
             console.log('Shop controller : Fetch Single Product ::', error.message);
-            return res.status(500).json({success : false , message : 'Intrenal server error!'});
+            return res.status(500).json({ success: false, message: 'Intrenal server error!' });
       }
 }
 
@@ -86,7 +88,20 @@ export const orderProduct = async (req, res) => {
 
             if (!product) return res.status(409).json({ success: false, message: "Out of stock better luck next time" });
 
-            const newOrder = await OrderModel.create({ amount, userId: id, paymentId, productId, shippingAddress, quantity, modeOfPayment });
+            const snapShotImage = await moveImage(product.image.imageUrl);
+
+            const newOrder = await OrderModel.create({
+                  amount, userId: id, paymentId, productId, shippingAddress, quantity, modeOfPayment, productSnapShot: {
+
+                        name: product.productName,
+                        image: {
+                              imageUrl: snapShotImage.imageUrl,
+                              publicId: snapShotImage.publicId,
+                        },
+                        priceWhenOrder: amount,
+                  }
+            });
+
             const user = await UserModel.findOneAndUpdate({ _id: id }, { $push: { orderHistory: newOrder._id } });
 
 
@@ -162,16 +177,16 @@ export const deleteProduct = async (req, res) => {
             const { id } = req.params;
             const deletedProduct = await ProductModel.findByIdAndDelete(id);
 
-            if(!deletedProduct) return res.status(400).json({success: false , message : 'Product not found'});
+            if (!deletedProduct) return res.status(400).json({ success: false, message: 'Product not found' });
 
             await deleteImageById(deletedProduct.image.publicId);
 
-            const updateUsersCart = UserModel.updateMany({},{
-                  $pull:{cart : {products : id}}
+            await UserModel.updateMany({}, {
+                  $pull: { cart: { products: id } }
             });
-            const products = await  ProductModel.find();
+            const products = await ProductModel.find();
 
-            return res.status(200).json({success : true , message: " product deleted successfully!" , products})
+            return res.status(200).json({ success: true, message: " product deleted successfully!", products })
 
       } catch (error) {
             console.log('Shop Controller : Update Product ::', error.message);
