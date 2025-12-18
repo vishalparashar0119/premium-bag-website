@@ -9,7 +9,7 @@ const connectDb = async () => {
             })
             console.log('DataBase Connected Successfully');
       } catch (error) {
-            console.log('Error ::', error)
+            console.log('dataBase.js ::', error)
       }
 }
 
