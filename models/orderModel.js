@@ -2,10 +2,19 @@ import mongoose from "mongoose";
 
 const orderSchema = mongoose.Schema({
       amount: Number,
-      productId: {
+       productId : {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Product'
       },
+      productSnapShot: [{
+            name : String,
+            image : {
+                  imageUrl : String,
+                  publicId : String
+            },
+            priceWhenOrder:Number,
+            
+      }],
       userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'user'
