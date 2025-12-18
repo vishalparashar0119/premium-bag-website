@@ -56,7 +56,7 @@ export const fetchSingleProduct = async (req, res) => {
       } catch (error) {
 
             console.log('Shop controller : Fetch Single Product ::', error.message);
-            console.log(error.message)
+            return res.status(500).json({success : false , message : 'Intrenal server error!'});
       }
 }
 
@@ -166,6 +166,9 @@ export const deleteProduct = async (req, res) => {
 
             await deleteImageById(deletedProduct.image.publicId);
 
+            const updateUsersCart = UserModel.updateMany({},{
+                  $pull:{cart : {products : id}}
+            });
             const products = await  ProductModel.find();
 
             return res.status(200).json({success : true , message: " product deleted successfully!" , products})

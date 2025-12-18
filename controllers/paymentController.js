@@ -3,7 +3,6 @@ import confirmSignature from '../utils/confirmSignature.js'
 
 export const createOrderRazorPay = async (req, res) => {
       const { amount } = req.body;
-      console.log(amount)
       try {
             const order = await razorpay.orders.create({
                   amount: amount * 100,

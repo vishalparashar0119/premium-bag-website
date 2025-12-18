@@ -24,7 +24,6 @@ export const verifyEmail = async (req, res) => {
             const hashPassword = await genrateHash(password);
             const genOtp = otp();
             const sendMail = await sendEmail(email , genOtp);
-            console.log(sendMail);
             const hashOtp = await genrateHash(genOtp);
 
 
@@ -54,11 +53,7 @@ export const registerUser = async (req, res) => {
              
             const pendingUser = await VerifyEmailModel.findOne({ email: email });
 
-            console.log(pendingUser);
-
-            const verified = await comparePassword(otp , pendingUser.otp)
-
-            console.log(verified);
+            const verified = await comparePassword(otp , pendingUser.otp);
 
             if(!verified) return res.status(401).json({success : false , message : 'Please enter a correct OTP'})
 
