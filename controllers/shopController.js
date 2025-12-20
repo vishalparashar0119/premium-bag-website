@@ -193,3 +193,16 @@ export const deleteProduct = async (req, res) => {
             return res.status(500).json({ success: false, message: 'Somthing went wrong!' })
       }
 } 
+
+export const getTodaysOrder = async (req , res) =>{
+      try {
+            const todaysOrder = await OrderModel.find().populate('userId').sort({createdAt:-1});
+            return res.status(200).json({
+                  success : true , message :'todays order', 
+                  todaysOrder
+            })
+      } catch (error) {
+            console.log('Shop Controller : Get Todays Order ::', error.message);
+            return res.status(500).json({ success: false, message: 'Somthing went wrong!' })
+      }
+}
