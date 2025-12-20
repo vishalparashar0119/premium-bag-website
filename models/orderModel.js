@@ -17,7 +17,7 @@ const orderSchema = mongoose.Schema({
       }],
       userId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'user'
+            ref: 'User'
       },
       paymentId: {
             type: String,
@@ -38,6 +38,11 @@ const orderSchema = mongoose.Schema({
       modeOfPayment: {
             type: String,
             enum: ['Online', 'COD']
+      },
+      status:{
+            type : String,
+            enum :['notViewed' , 'viewed','packed','shipped','delivered','returned'],
+            default:'notViewed'
       }
 }, {
       timestamps: true
