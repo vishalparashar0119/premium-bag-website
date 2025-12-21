@@ -5,6 +5,7 @@ import comparePassword from '../utils/comparePassword.js';
 import VerifyEmailModel from "../models/verifyEmailModel.js";
 import otp from '../utils/genrateOtp.js';
 import sendEmail from '../utils/sendEmail.js';
+import OwnerModel from '../models/ownerModel.js';
 
 
 
@@ -23,7 +24,7 @@ export const verifyEmail = async (req, res) => {
 
             const hashPassword = await genrateHash(password);
             const genOtp = otp();
-            const sendMail = await sendEmail(email , genOtp);
+            const sendMail = await sendEmail(email, genOtp);
             const hashOtp = await genrateHash(genOtp);
 
 
@@ -31,7 +32,7 @@ export const verifyEmail = async (req, res) => {
 
             const token = genrateJwtToken(verifyUser);
 
-            res.cookie('verify', token , {
+            res.cookie('verify', token, {
                   httpOnly: true,
                   secure: false,
                   sameSite: 'lax',
@@ -40,25 +41,25 @@ export const verifyEmail = async (req, res) => {
 
             return res.status(200).json({ success: true, message: 'user verification created successfully', verifyUser });
       } catch (error) {
-            console.log('Auth controller : Verify Email::',error.message);
-            return res.status(500).json({success : false , message : 'Somthing went wrong!'});
+            console.log('Auth controller : Verify Email::', error.message);
+            return res.status(500).json({ success: false, message: 'Somthing went wrong!' });
       }
 }
 
 export const registerUser = async (req, res) => {
       try {
-            const {otp} = req.body;
-            const {email} = req.user;
+            const { otp } = req.body;
+            const { email } = req.user;
 
-             
+
             const pendingUser = await VerifyEmailModel.findOne({ email: email });
 
-            const verified = await comparePassword(otp , pendingUser.otp);
+            const verified = await comparePassword(otp, pendingUser.otp);
 
-            if(!verified) return res.status(401).json({success : false , message : 'Please enter a correct OTP'})
+            if (!verified) return res.status(401).json({ success: false, message: 'Please enter a correct OTP' })
 
             const newUser = await UserModel.create({
-                  fullName : pendingUser.fullName, email : pendingUser.email, password: pendingUser.password
+                  fullName: pendingUser.fullName, email: pendingUser.email, password: pendingUser.password
             });
 
             const token = genrateJwtToken(newUser);
@@ -76,8 +77,8 @@ export const registerUser = async (req, res) => {
             });
 
       } catch (error) {
-            console.log('Auth controller : Rejister Email::',error.message);
-            return res.status(500).json({success : false , message : 'Somthing went wrong!'});
+            console.log('Auth controller : Rejister Email::', error.message);
+            return res.status(500).json({ success: false, message: 'Somthing went wrong!' });
       }
 
 }
@@ -87,7 +88,25 @@ export const loginUser = async (req, res) => {
       try {
             const { email, password } = req.body;
 
+            const isAdmin = await OwnerModel.findOne({ email });
+            if (isAdmin) {
+
+                  const isMatch = await comparePassword(password, isAdmin.password);
+                  if (!isMatch) return res.status(401).json({ success: false, message: 'email or password is incorrect' })
+
+                  const token = genrateJwtToken(isAdmin);
+                  res.cookie('token', token, {
+                        httpOnly: true,
+                        secure: false,
+                        sameSite: 'lax',
+                        path: '/'
+                  });
+
+                  return res.status(200).json({ success: true, isAdmin: true, message: 'login success fully' });
+            }
+
             const user = await UserModel.findOne({ email: email });
+
             if (!user) return res.status(404).send({ success: false, message: 'email or password is incorrect' });
 
             const isMatch = await comparePassword(password, user.password);
@@ -101,11 +120,11 @@ export const loginUser = async (req, res) => {
                   path: '/'
             });
 
-            return res.status(200).json({ success: true, message: 'login success fully' });
+            return res.status(200).json({ success: true,isAdmin : false , message: 'login success fully' });
 
       } catch (error) {
-            console.log('Auth controller : Login User::',error.message);
-            return res.status(500).json({success : false , message : 'Somthing went wrong!'});
+            console.log('Auth controller : Login User::', error.message);
+            return res.status(500).json({ success: false, message: 'Somthing went wrong!' });
       }
 }
 
@@ -121,7 +140,7 @@ export const logoutUser = async (req, res) => {
 
             res.status(200).json({ success: true, message: 'logout successfully' })
       } catch (error) {
-            console.log('Auth controller : Logout User::',error.message);
-            return res.status(500).json({success : false , message : 'Somthing went wrong!'});
+            console.log('Auth controller : Logout User::', error.message);
+            return res.status(500).json({ success: false, message: 'Somthing went wrong!' });
       }
 }
