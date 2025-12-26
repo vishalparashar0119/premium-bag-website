@@ -1,3 +1,5 @@
+import env from 'dotenv';
+env.config();
 import mongoose from "mongoose";
 
 const mongoUri = process.env.MONGODBURL || 'mongodb://localhost:27017/a-primium-bag-website';
