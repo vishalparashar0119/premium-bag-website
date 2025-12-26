@@ -24,6 +24,7 @@ app.use(cors({
       methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
       allowedHeaders: ["Content-Type", "Authorization"]
 }));
+app.options("*", cors());
 
 
 const port = process.env.PORT || 3000;
