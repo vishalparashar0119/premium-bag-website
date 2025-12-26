@@ -12,12 +12,6 @@ import cors from 'cors';
 
 
 const app = express();
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
-app.set('view engine', 'ejs');
-app.use(express.static('public'));
 app.use(cors({
       origin: ["http://localhost:5173" , "https://premium-bag-website-frontend.vercel.app/"],
       credentials: true,
@@ -25,6 +19,12 @@ app.use(cors({
       allowedHeaders: ["Content-Type", "Authorization"]
 }));
 app.options("*", cors());
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
 
 
 const port = process.env.PORT || 3000;
