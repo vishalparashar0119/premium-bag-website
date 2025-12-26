@@ -13,7 +13,7 @@ import cors from 'cors';
 
 const app = express();
 app.use(cors({
-      origin: ["http://localhost:5173" , "https://premium-bag-website-frontend.vercel.app"],
+      origin: ["http://localhost:5173" , `${process.env.FRONT_END_URI}`],
       credentials: true,
       methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
       allowedHeaders: ["Content-Type", "Authorization"]
@@ -27,7 +27,7 @@ app.use(express.static('public'));
 
 
 const port = process.env.PORT || 3000;
-connectDb();
+await connectDb();
 
 app.use('/owners', ownersRouter);
 app.use('/shop', index);
@@ -35,7 +35,6 @@ app.use('/users', usersRouter);
 app.use('/products', productsRouter);
 
 app.get('/', (req, res) => {
-      const error = req.flash('error')
       res.json({ message: 'server is running', error });
 });
 
