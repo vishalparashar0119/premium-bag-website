@@ -35,7 +35,7 @@ app.use('/users', usersRouter);
 app.use('/products', productsRouter);
 
 app.get('/', (req, res) => {
-      res.json({ message: 'server is running', error });
+      res.json({ message: 'server is running'});
 });
 
 app.listen(port, () => {
