@@ -115,8 +115,8 @@ export const loginUser = async (req, res) => {
             const token = genrateJwtToken(user);
             res.cookie('token', token, {
                   httpOnly: true,
-                  secure: false,
-                  sameSite: 'lax',
+                  secure: true,
+                  sameSite: 'None',
                   path: '/'
             });
 
