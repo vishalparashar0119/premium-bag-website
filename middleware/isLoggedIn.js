@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import UserModel from '../models/UserModel.js';
 
 
-const isLoggendIn = async (req, res, next) => {
+const  isLoggendIn = async (req, res, next) => {
 
       if (!req.cookies.token) return res.status(401).json({ status: false, message: ' unautherise access' });
 

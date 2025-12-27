@@ -66,8 +66,8 @@ export const registerUser = async (req, res) => {
 
             res.cookie('token', token, {
                   httpOnly: true,
-                  secure: false,
-                  sameSite: 'lax',
+                  secure: true,
+                  sameSite: 'None',
                   path: '/'
             });
 
@@ -97,8 +97,8 @@ export const loginUser = async (req, res) => {
                   const token = genrateJwtToken(isAdmin);
                   res.cookie('token', token, {
                         httpOnly: true,
-                        secure: false,
-                        sameSite: 'lax',
+                        secure: true,
+                        sameSite: 'None',
                         path: '/'
                   });
 
