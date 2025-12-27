@@ -34,8 +34,8 @@ export const verifyEmail = async (req, res) => {
 
             res.cookie('verify', token, {
                   httpOnly: true,
-                  secure: false,
-                  sameSite: 'lax',
+                  secure: true,
+                  sameSite: 'None',
                   path: '/'
             })
 
