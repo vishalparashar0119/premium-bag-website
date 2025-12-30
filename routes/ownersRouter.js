@@ -11,6 +11,9 @@ router.get('/isAdmin', isAdmin, async (req, res) => {
       return res.status(200).json({ success: true, message: 'this is admin' })
 });
 
+
+router.get('/product/:id'  , isAdmin , fetchSingleProduct);
+
 router.post('/createProduct', isAdmin, upload.single('image'), createProduct);
 
 router.delete('/deleteProduct/:id', isAdmin, deleteProduct);
