@@ -1,6 +1,6 @@
 import express from 'express';
 import { upload } from '../config/cloudnaryMulterConfig.js';
-import { createProduct, deleteProduct, fetchAllProducts, getTodaysOrder } from '../controllers/shopController.js';
+import { createProduct, deleteProduct, fetchAllProducts, fetchSingleProduct, getTodaysOrder } from '../controllers/shopController.js';
 import isAdmin from '../middleware/isAdmin.js';
 
 const router = express.Router();
@@ -12,7 +12,7 @@ router.get('/isAdmin', isAdmin, async (req, res) => {
 });
 
 
-router.get('/product/:id'  , isAdmin , fetchSingleProduct);
+router.get('/product/:id', isAdmin, fetchSingleProduct);
 
 router.post('/createProduct', isAdmin, upload.single('image'), createProduct);
 
