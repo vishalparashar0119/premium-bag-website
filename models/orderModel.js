@@ -21,16 +21,11 @@ const orderSchema = mongoose.Schema({
       },
       paymentId: {
             type: String,
-            require: () => {
+            require: function(){
                   return this.modeOfPayment === 'Online'
             }
       },
       shippingAddress: String,
-      status: {
-            type: String,
-            enum: ['Ordered', 'Delevered', 'Returned'],
-            default: 'Ordered'
-      },
       quantity: {
             type: Number,
             default: 1
@@ -41,8 +36,12 @@ const orderSchema = mongoose.Schema({
       },
       status:{
             type : String,
-            enum :['notViewed' , 'viewed','packed','shipped','delivered','returned'],
-            default:'notViewed'
+            enum :['Not Viewed' , 'Viewed','Packed','Shipped','Delivered','Returned'],
+            default:'Not Viewed'
+      },
+      counter : {
+            type :Number,
+            default : 0,
       }
 }, {
       timestamps: true
