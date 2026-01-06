@@ -192,17 +192,54 @@ export const deleteProduct = async (req, res) => {
             console.log('Shop Controller : Update Product ::', error.message);
             return res.status(500).json({ success: false, message: 'Somthing went wrong!' })
       }
-} 
+}
 
-export const getTodaysOrder = async (req , res) =>{
+export const getTodaysOrder = async (req, res) => {
       try {
-            const todaysOrder = await OrderModel.find().populate('userId').sort({createdAt:-1});
+            const todaysOrder = await OrderModel.find().populate('userId').sort({ createdAt: -1 });
             return res.status(200).json({
-                  success : true , message :'todays order', 
+                  success: true, message: 'todays order',
                   todaysOrder
             })
       } catch (error) {
             console.log('Shop Controller : Get Todays Order ::', error.message);
+            return res.status(500).json({ success: false, message: 'Somthing went wrong!' })
+      }
+}
+
+export const updateProcess = async (req, res) => {
+      try {
+            const { id } = req.params;
+            let status = "";
+
+
+            const updateOrder = await OrderModel.findById(id);
+            if (!updateOrder) return res.status(404).json({ success: true, message: 'Order not found' });
+
+            updateOrder.counter += 1;
+
+            switch (updateOrder.counter) {
+                  case 1: status = 'Viewed'; break;
+                  case 2: status = 'Packed'; break;
+                  case 3: status = 'Shipped'; break;
+                  case 4: status = 'Delivered'; break;
+                  case 5: status = 'Returned'; break;
+                  default: status = updateOrder.status;
+            }
+
+            updateOrder.status = status;
+            await updateOrder.save();
+
+            const todaysOrder = await OrderModel.find().populate('userId').sort({ createdAt: -1 });
+
+
+            return res.status(200).json({
+                  success: true, message: 'order updated successfully',
+                  todaysOrder
+            });
+
+      } catch (error) {
+            console.log('Shop Controller : Update Process ::', error.message);
             return res.status(500).json({ success: false, message: 'Somthing went wrong!' })
       }
 }
